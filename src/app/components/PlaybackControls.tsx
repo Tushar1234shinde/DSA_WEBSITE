@@ -1,69 +1,88 @@
-import { Play, Pause, SkipBack, SkipForward, RotateCcw } from 'lucide-react';
-import { Button } from './ui/button';
-import { Slider } from './ui/slider';
+import { Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
+import { Button } from "./ui/button";
+import { Slider } from "./ui/slider";
 
 interface PlaybackControlsProps {
+  currentStep: number;
   isPlaying: boolean;
+  onNext: () => void;
   onPlayPause: () => void;
   onPrevious: () => void;
-  onNext: () => void;
   onReset: () => void;
-  speed: number;
   onSpeedChange: (speed: number) => void;
+  speed: number;
+  totalSteps: number;
 }
 
 export const PlaybackControls = ({
+  currentStep,
   isPlaying,
+  onNext,
   onPlayPause,
   onPrevious,
-  onNext,
   onReset,
+  onSpeedChange,
   speed,
-  onSpeedChange
+  totalSteps,
 }: PlaybackControlsProps) => {
+  const progress = totalSteps > 1 ? (currentStep / (totalSteps - 1)) * 100 : 0;
+
   return (
-    <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
+    <section className="rounded-[2rem] border border-white/40 bg-white/75 p-6 shadow-xl shadow-slate-200/40 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/70 dark:shadow-none">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
           <Button
             variant="outline"
             size="icon"
             onClick={onReset}
-            className="rounded-lg"
+            className="size-11 rounded-2xl border-slate-200 dark:border-slate-700"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="size-4" />
           </Button>
           <Button
             variant="outline"
             size="icon"
             onClick={onPrevious}
-            className="rounded-lg"
+            className="size-11 rounded-2xl border-slate-200 dark:border-slate-700"
           >
-            <SkipBack className="w-4 h-4" />
+            <SkipBack className="size-4" />
           </Button>
           <Button
             size="icon"
             onClick={onPlayPause}
-            className="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500"
+            className="size-12 rounded-2xl bg-gradient-to-r from-sky-500 via-cyan-500 to-orange-400 text-white hover:from-sky-600 hover:via-cyan-600 hover:to-orange-500"
           >
-            {isPlaying ? (
-              <Pause className="w-4 h-4" fill="white" />
-            ) : (
-              <Play className="w-4 h-4" fill="white" />
-            )}
+            {isPlaying ? <Pause className="size-4" /> : <Play className="size-4" />}
           </Button>
           <Button
             variant="outline"
             size="icon"
             onClick={onNext}
-            className="rounded-lg"
+            className="size-11 rounded-2xl border-slate-200 dark:border-slate-700"
           >
-            <SkipForward className="w-4 h-4" />
+            <SkipForward className="size-4" />
           </Button>
         </div>
 
-        <div className="flex items-center gap-4 flex-1 max-w-xs">
-          <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+        <div className="flex flex-1 flex-col gap-4 lg:max-w-xl">
+          <div className="flex items-center justify-between text-sm">
+            <span className="font-medium text-slate-700 dark:text-slate-300">
+              Step {Math.min(currentStep + 1, totalSteps)} of {totalSteps}
+            </span>
+            <span className="text-slate-500 dark:text-slate-400">
+              {progress.toFixed(0)}% complete
+            </span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-sky-500 via-cyan-500 to-orange-400 transition-[width] duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 lg:w-72">
+          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
             Speed
           </span>
           <Slider
@@ -74,11 +93,11 @@ export const PlaybackControls = ({
             step={0.1}
             className="flex-1"
           />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-8">
-            {speed}x
+          <span className="w-10 text-right text-sm font-semibold text-slate-800 dark:text-slate-200">
+            {speed.toFixed(1)}x
           </span>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

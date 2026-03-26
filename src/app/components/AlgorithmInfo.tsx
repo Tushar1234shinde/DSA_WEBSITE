@@ -1,105 +1,100 @@
-import { Algorithm } from '../data/algorithms';
-import { Clock, HardDrive, Code } from 'lucide-react';
-import { ScrollArea } from './ui/scroll-area';
-import { Badge } from './ui/badge';
+import { Clock3, Code2, HardDrive, MessageSquareQuote } from "lucide-react";
+import { type Algorithm } from "../data/algorithms";
+import { ScrollArea } from "./ui/scroll-area";
 
 interface AlgorithmInfoProps {
   algorithm: Algorithm | null;
   currentStep: number;
+  currentStepIndex: number;
+  message: string;
+  totalSteps: number;
 }
 
-export const AlgorithmInfo = ({ algorithm, currentStep }: AlgorithmInfoProps) => {
+export const AlgorithmInfo = ({
+  algorithm,
+  currentStep,
+  currentStepIndex,
+  message,
+  totalSteps,
+}: AlgorithmInfoProps) => {
   if (!algorithm) {
-    return (
-      <aside className="w-96 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-6">
-        <div className="h-full flex items-center justify-center">
-          <p className="text-gray-400 dark:text-gray-600 text-center">
-            Select an algorithm to view details
-          </p>
-        </div>
-      </aside>
-    );
+    return null;
   }
 
   return (
-    <aside className="w-96 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col">
-      <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          {algorithm.name}
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-          {algorithm.description}
-        </p>
-      </div>
+    <aside className="border-t border-white/30 bg-white/55 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/45 lg:w-[360px] lg:border-t-0 lg:border-l">
+      <ScrollArea className="h-[420px] lg:h-[calc(100vh-4rem)]">
+        <div className="space-y-6 p-5">
+          <section className="rounded-[1.75rem] bg-slate-950 p-5 text-white dark:bg-slate-900">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">
+              Active Topic
+            </p>
+            <h2 className="text-2xl font-semibold tracking-tight">{algorithm.name}</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              {algorithm.description}
+            </p>
+          </section>
 
-      <ScrollArea className="flex-1">
-        <div className="p-6 space-y-6">
-          {/* Time Complexity */}
-          <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-100 dark:border-blue-900">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                Time Complexity
-              </h3>
+          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-[1.5rem] border border-sky-100 bg-sky-50 p-4 dark:border-sky-500/20 dark:bg-sky-500/10">
+              <div className="mb-3 flex items-center gap-2 text-sky-700 dark:text-sky-300">
+                <Clock3 className="size-4" />
+                <h3 className="text-sm font-semibold">Time Complexity</h3>
+              </div>
+              <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                <p>Best: {algorithm.timeComplexity.best}</p>
+                <p>Average: {algorithm.timeComplexity.average}</p>
+                <p>Worst: {algorithm.timeComplexity.worst}</p>
+              </div>
+            </div>
+
+            <div className="rounded-[1.5rem] border border-orange-100 bg-orange-50 p-4 dark:border-orange-500/20 dark:bg-orange-500/10">
+              <div className="mb-3 flex items-center gap-2 text-orange-700 dark:text-orange-300">
+                <HardDrive className="size-4" />
+                <h3 className="text-sm font-semibold">Space Complexity</h3>
+              </div>
+              <p className="text-sm text-slate-700 dark:text-slate-300">
+                {algorithm.spaceComplexity}
+              </p>
+            </div>
+          </section>
+
+          <section className="rounded-[1.75rem] border border-white/40 bg-white/80 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+            <div className="mb-3 flex items-center gap-2 text-slate-700 dark:text-slate-200">
+              <MessageSquareQuote className="size-4" />
+              <h3 className="text-sm font-semibold">Current Readout</h3>
+            </div>
+            <p className="text-sm leading-6 text-slate-600 dark:text-slate-400">
+              {message}
+            </p>
+            <p className="mt-3 text-xs font-medium uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+              Playback {currentStepIndex + 1}/{totalSteps}
+            </p>
+          </section>
+
+          <section className="rounded-[1.75rem] border border-white/40 bg-white/80 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+            <div className="mb-3 flex items-center gap-2 text-slate-700 dark:text-slate-200">
+              <Code2 className="size-4" />
+              <h3 className="text-sm font-semibold">Pseudo Code</h3>
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-600 dark:text-gray-400">Best:</span>
-                <Badge variant="secondary" className="font-mono text-xs bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400 border-green-200 dark:border-green-900">
-                  {algorithm.timeComplexity.best}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-600 dark:text-gray-400">Average:</span>
-                <Badge variant="secondary" className="font-mono text-xs bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-900">
-                  {algorithm.timeComplexity.average}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-600 dark:text-gray-400">Worst:</span>
-                <Badge variant="secondary" className="font-mono text-xs bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900">
-                  {algorithm.timeComplexity.worst}
-                </Badge>
-              </div>
+              {algorithm.pseudoCode.map((line, index) => {
+                const isActive = index === currentStep;
+                return (
+                  <div
+                    key={`${algorithm.id}-${index}`}
+                    className={`rounded-2xl px-3 py-2 font-mono text-xs leading-6 transition ${
+                      isActive
+                        ? "bg-gradient-to-r from-sky-500 to-cyan-500 text-white shadow-lg shadow-sky-500/20"
+                        : "bg-slate-100 text-slate-700 dark:bg-slate-950 dark:text-slate-400"
+                    }`}
+                  >
+                    {line}
+                  </div>
+                );
+              })}
             </div>
-          </div>
-
-          {/* Space Complexity */}
-          <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-4 border border-purple-100 dark:border-purple-900">
-            <div className="flex items-center gap-2 mb-3">
-              <HardDrive className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                Space Complexity
-              </h3>
-            </div>
-            <Badge variant="secondary" className="font-mono text-xs bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-900">
-              {algorithm.spaceComplexity}
-            </Badge>
-          </div>
-
-          {/* Pseudo Code */}
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
-            <div className="flex items-center gap-2 mb-3">
-              <Code className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
-                Pseudo Code
-              </h3>
-            </div>
-            <div className="space-y-1">
-              {algorithm.pseudoCode.map((line, index) => (
-                <div
-                  key={index}
-                  className={`font-mono text-xs py-1 px-2 rounded transition-colors ${
-                    index === currentStep
-                      ? 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-medium'
-                      : 'text-gray-700 dark:text-gray-400'
-                  }`}
-                >
-                  {line || '\u00A0'}
-                </div>
-              ))}
-            </div>
-          </div>
+          </section>
         </div>
       </ScrollArea>
     </aside>

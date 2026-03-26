@@ -12,198 +12,267 @@ export interface Algorithm {
   pseudoCode: string[];
 }
 
-export const algorithmCategories = [
+export interface AlgorithmCategory {
+  name: string;
+  items: string[];
+}
+
+export const algorithmCategories: AlgorithmCategory[] = [
   {
-    name: 'Arrays',
-    items: ['Array Traversal', 'Array Rotation', 'Kadane\'s Algorithm']
+    name: "Arrays",
+    items: ["Array Traversal", "Array Rotation", "Kadane's Algorithm"],
   },
   {
-    name: 'Linked List',
-    items: ['Insert Node', 'Delete Node', 'Reverse List']
+    name: "Linked List",
+    items: ["Insert Node", "Delete Node", "Reverse List"],
   },
   {
-    name: 'Stack',
-    items: ['Push Operation', 'Pop Operation', 'Stack Applications']
+    name: "Stack",
+    items: ["Push Operation", "Pop Operation", "Stack Applications"],
   },
   {
-    name: 'Queue',
-    items: ['Enqueue', 'Dequeue', 'Circular Queue']
+    name: "Queue",
+    items: ["Enqueue", "Dequeue", "Circular Queue"],
   },
   {
-    name: 'Trees',
-    items: ['Binary Tree Traversal', 'BST Insert', 'BST Search']
+    name: "Trees",
+    items: ["Binary Tree Traversal", "BST Insert", "BST Search"],
   },
   {
-    name: 'Graphs',
-    items: ['BFS', 'DFS', 'Dijkstra\'s Algorithm']
+    name: "Graphs",
+    items: ["Breadth-First Search", "Depth-First Search", "Dijkstra's Algorithm"],
   },
   {
-    name: 'Sorting Algorithms',
-    items: ['Bubble Sort', 'Quick Sort', 'Merge Sort', 'Insertion Sort', 'Selection Sort']
+    name: "Sorting Algorithms",
+    items: [
+      "Bubble Sort",
+      "Quick Sort",
+      "Merge Sort",
+      "Insertion Sort",
+      "Selection Sort",
+    ],
   },
   {
-    name: 'Searching Algorithms',
-    items: ['Linear Search', 'Binary Search', 'Jump Search']
-  }
+    name: "Searching Algorithms",
+    items: ["Linear Search", "Binary Search", "Jump Search"],
+  },
 ];
 
-export const algorithms: Algorithm[] = [
-  {
-    id: 'bubble-sort',
-    name: 'Bubble Sort',
-    category: 'Sorting Algorithms',
-    description: 'A simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.',
+const algorithmMap: Record<string, Algorithm> = {
+  "Bubble Sort": {
+    id: "bubble-sort",
+    name: "Bubble Sort",
+    category: "Sorting Algorithms",
+    description:
+      "Repeatedly compares adjacent values and swaps them until larger values bubble to the end.",
     timeComplexity: {
-      best: 'O(n)',
-      average: 'O(n²)',
-      worst: 'O(n²)'
+      best: "O(n)",
+      average: "O(n^2)",
+      worst: "O(n^2)",
     },
-    spaceComplexity: 'O(1)',
+    spaceComplexity: "O(1)",
     pseudoCode: [
-      'function bubbleSort(arr):',
-      '  n = length(arr)',
-      '  for i = 0 to n-1:',
-      '    for j = 0 to n-i-1:',
-      '      if arr[j] > arr[j+1]:',
-      '        swap(arr[j], arr[j+1])',
-      '  return arr'
-    ]
+      "for i from 0 to n - 1",
+      "  swapped = false",
+      "  for j from 0 to n - i - 2",
+      "    if arr[j] > arr[j + 1]",
+      "      swap arr[j], arr[j + 1]",
+      "      swapped = true",
+      "  if swapped is false, break",
+    ],
   },
-  {
-    id: 'quick-sort',
-    name: 'Quick Sort',
-    category: 'Sorting Algorithms',
-    description: 'An efficient, divide-and-conquer sorting algorithm that picks a pivot element and partitions the array around it.',
+  "Quick Sort": {
+    id: "quick-sort",
+    name: "Quick Sort",
+    category: "Sorting Algorithms",
+    description:
+      "Chooses a pivot, partitions the array around it, then recursively sorts the two halves.",
     timeComplexity: {
-      best: 'O(n log n)',
-      average: 'O(n log n)',
-      worst: 'O(n²)'
+      best: "O(n log n)",
+      average: "O(n log n)",
+      worst: "O(n^2)",
     },
-    spaceComplexity: 'O(log n)',
+    spaceComplexity: "O(log n)",
     pseudoCode: [
-      'function quickSort(arr, low, high):',
-      '  if low < high:',
-      '    pivot = partition(arr, low, high)',
-      '    quickSort(arr, low, pivot - 1)',
-      '    quickSort(arr, pivot + 1, high)',
-      '',
-      'function partition(arr, low, high):',
-      '  pivot = arr[high]',
-      '  i = low - 1',
-      '  for j = low to high - 1:',
-      '    if arr[j] < pivot:',
-      '      i++',
-      '      swap(arr[i], arr[j])',
-      '  swap(arr[i + 1], arr[high])',
-      '  return i + 1'
-    ]
+      "quickSort(low, high)",
+      "  if low >= high, return",
+      "  pivot = partition(low, high)",
+      "  quickSort(low, pivot - 1)",
+      "  quickSort(pivot + 1, high)",
+      "partition places pivot in final position",
+    ],
   },
-  {
-    id: 'merge-sort',
-    name: 'Merge Sort',
-    category: 'Sorting Algorithms',
-    description: 'A divide-and-conquer algorithm that divides the array into halves, sorts them, and then merges them back together.',
+  "Merge Sort": {
+    id: "merge-sort",
+    name: "Merge Sort",
+    category: "Sorting Algorithms",
+    description:
+      "Splits the array into halves, sorts both halves, and merges them in sorted order.",
     timeComplexity: {
-      best: 'O(n log n)',
-      average: 'O(n log n)',
-      worst: 'O(n log n)'
+      best: "O(n log n)",
+      average: "O(n log n)",
+      worst: "O(n log n)",
     },
-    spaceComplexity: 'O(n)',
+    spaceComplexity: "O(n)",
     pseudoCode: [
-      'function mergeSort(arr):',
-      '  if length(arr) <= 1:',
-      '    return arr',
-      '  mid = length(arr) / 2',
-      '  left = mergeSort(arr[0...mid])',
-      '  right = mergeSort(arr[mid...end])',
-      '  return merge(left, right)',
-      '',
-      'function merge(left, right):',
-      '  result = []',
-      '  while left and right not empty:',
-      '    if left[0] <= right[0]:',
-      '      result.append(left[0])',
-      '      left.remove_first()',
-      '    else:',
-      '      result.append(right[0])',
-      '      right.remove_first()',
-      '  return result + left + right'
-    ]
+      "mergeSort(arr)",
+      "  if length <= 1, return arr",
+      "  split into left and right halves",
+      "  sort left and sort right",
+      "  merge the two sorted halves",
+    ],
   },
-  {
-    id: 'binary-search',
-    name: 'Binary Search',
-    category: 'Searching Algorithms',
-    description: 'An efficient searching algorithm that finds the position of a target value within a sorted array by repeatedly dividing the search interval in half.',
+  "Insertion Sort": {
+    id: "insertion-sort",
+    name: "Insertion Sort",
+    category: "Sorting Algorithms",
+    description:
+      "Builds a sorted section one value at a time by inserting each element into the right position.",
     timeComplexity: {
-      best: 'O(1)',
-      average: 'O(log n)',
-      worst: 'O(log n)'
+      best: "O(n)",
+      average: "O(n^2)",
+      worst: "O(n^2)",
     },
-    spaceComplexity: 'O(1)',
+    spaceComplexity: "O(1)",
     pseudoCode: [
-      'function binarySearch(arr, target):',
-      '  left = 0',
-      '  right = length(arr) - 1',
-      '  while left <= right:',
-      '    mid = (left + right) / 2',
-      '    if arr[mid] == target:',
-      '      return mid',
-      '    else if arr[mid] < target:',
-      '      left = mid + 1',
-      '    else:',
-      '      right = mid - 1',
-      '  return -1'
-    ]
+      "for i from 1 to n - 1",
+      "  key = arr[i]",
+      "  j = i - 1",
+      "  while j >= 0 and arr[j] > key",
+      "    arr[j + 1] = arr[j]",
+      "    j = j - 1",
+      "  arr[j + 1] = key",
+    ],
   },
-  {
-    id: 'bfs',
-    name: 'Breadth-First Search',
-    category: 'Graphs',
-    description: 'A graph traversal algorithm that explores vertices level by level, visiting all neighbors before moving to the next level.',
+  "Selection Sort": {
+    id: "selection-sort",
+    name: "Selection Sort",
+    category: "Sorting Algorithms",
+    description:
+      "Finds the smallest remaining value in each pass and places it at the next sorted position.",
     timeComplexity: {
-      best: 'O(V + E)',
-      average: 'O(V + E)',
-      worst: 'O(V + E)'
+      best: "O(n^2)",
+      average: "O(n^2)",
+      worst: "O(n^2)",
     },
-    spaceComplexity: 'O(V)',
+    spaceComplexity: "O(1)",
     pseudoCode: [
-      'function BFS(graph, start):',
-      '  queue = [start]',
-      '  visited = set()',
-      '  visited.add(start)',
-      '  while queue not empty:',
-      '    vertex = queue.dequeue()',
-      '    process(vertex)',
-      '    for neighbor in graph[vertex]:',
-      '      if neighbor not in visited:',
-      '        visited.add(neighbor)',
-      '        queue.enqueue(neighbor)'
-    ]
+      "for i from 0 to n - 1",
+      "  minIndex = i",
+      "  for j from i + 1 to n - 1",
+      "    if arr[j] < arr[minIndex]",
+      "      minIndex = j",
+      "  swap arr[i], arr[minIndex]",
+    ],
   },
-  {
-    id: 'dfs',
-    name: 'Depth-First Search',
-    category: 'Graphs',
-    description: 'A graph traversal algorithm that explores as far as possible along each branch before backtracking.',
+  "Binary Search": {
+    id: "binary-search",
+    name: "Binary Search",
+    category: "Searching Algorithms",
+    description:
+      "Searches a sorted array by cutting the search range in half at each step.",
     timeComplexity: {
-      best: 'O(V + E)',
-      average: 'O(V + E)',
-      worst: 'O(V + E)'
+      best: "O(1)",
+      average: "O(log n)",
+      worst: "O(log n)",
     },
-    spaceComplexity: 'O(V)',
+    spaceComplexity: "O(1)",
     pseudoCode: [
-      'function DFS(graph, start):',
-      '  stack = [start]',
-      '  visited = set()',
-      '  while stack not empty:',
-      '    vertex = stack.pop()',
-      '    if vertex not in visited:',
-      '      visited.add(vertex)',
-      '      process(vertex)',
-      '      for neighbor in graph[vertex]:',
-      '        if neighbor not in visited:',
-      '          stack.push(neighbor)'
-    ]
-  }
-];
+      "left = 0, right = n - 1",
+      "while left <= right",
+      "  mid = floor((left + right) / 2)",
+      "  if arr[mid] == target, return mid",
+      "  if arr[mid] < target, left = mid + 1",
+      "  else right = mid - 1",
+    ],
+  },
+  "Linear Search": {
+    id: "linear-search",
+    name: "Linear Search",
+    category: "Searching Algorithms",
+    description:
+      "Scans the array from left to right until the target value is found or the list ends.",
+    timeComplexity: {
+      best: "O(1)",
+      average: "O(n)",
+      worst: "O(n)",
+    },
+    spaceComplexity: "O(1)",
+    pseudoCode: [
+      "for each index i in arr",
+      "  if arr[i] == target",
+      "    return i",
+      "return -1",
+    ],
+  },
+  "Breadth-First Search": {
+    id: "breadth-first-search",
+    name: "Breadth-First Search",
+    category: "Graphs",
+    description:
+      "Traverses graph nodes level by level using a queue.",
+    timeComplexity: {
+      best: "O(V + E)",
+      average: "O(V + E)",
+      worst: "O(V + E)",
+    },
+    spaceComplexity: "O(V)",
+    pseudoCode: [
+      "queue = [start]",
+      "visited = {start}",
+      "while queue not empty",
+      "  node = queue.dequeue()",
+      "  visit node",
+      "  enqueue unvisited neighbors",
+    ],
+  },
+  "Depth-First Search": {
+    id: "depth-first-search",
+    name: "Depth-First Search",
+    category: "Graphs",
+    description:
+      "Traverses as deep as possible along each branch before backtracking.",
+    timeComplexity: {
+      best: "O(V + E)",
+      average: "O(V + E)",
+      worst: "O(V + E)",
+    },
+    spaceComplexity: "O(V)",
+    pseudoCode: [
+      "stack = [start]",
+      "visited = {}",
+      "while stack not empty",
+      "  node = stack.pop()",
+      "  if node not visited, visit it",
+      "  push unvisited neighbors",
+    ],
+  },
+};
+
+function createFallbackAlgorithm(name: string, category: string): Algorithm {
+  return {
+    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    name,
+    category,
+    description:
+      "A conceptual learning card for this topic. Add custom input and walkthrough logic to extend the visualizer further.",
+    timeComplexity: {
+      best: "Varies",
+      average: "Varies",
+      worst: "Varies",
+    },
+    spaceComplexity: "Varies",
+    pseudoCode: [
+      `Understand the core idea behind ${name}`,
+      "Pick a representative example input",
+      "Trace the state changes step by step",
+      "Observe the result and time/space tradeoffs",
+    ],
+  };
+}
+
+export const algorithms: Algorithm[] = algorithmCategories.flatMap((category) =>
+  category.items.map(
+    (item) => algorithmMap[item] ?? createFallbackAlgorithm(item, category.name),
+  ),
+);
